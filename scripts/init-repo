@@ -1,0 +1,3 @@
+#!/bin/sh
+git remote add origin git@bitbucket.org:sousouindustries/python-amqp.git
+git remote add github git@github.com:sousouindustries/python-amqp.git

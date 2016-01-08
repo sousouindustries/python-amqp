@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -rf ../*.deb
+rm -rf ../*.changes
+dpkg-buildpackage -rfakeroot -b

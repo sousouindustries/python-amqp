@@ -1,0 +1,5 @@
+python3-amqp.one (1.0.0ubuntu22) stable; urgency=medium
+
+  * First public release with 100% test coverage.
+
+ -- Sousou Industries Releases <releases@sousouindustries.com>  Tue, 20 Oct 2015 03:04:46 +0200
