@@ -1,0 +1,20 @@
+#!/bin/sh
+set +e
+rm -rf .coverage
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+MIN_PERCENTAGE=100
+echo "Working directory: $SCRIPTPATH"
+export PYTHONPATH="$SCRIPTPATH:$PYTHONPATH"
+coverage3 run -m nose --cover-package=amqp -w tests -x && \
+coverage3 report --include=amqp/* \
+    --omit "./tests/*" \
+    --omit "./amqp/utils/compat.py,./amqp/typesystem/utils.py" \
+    --fail-under $MIN_PERCENTAGE -m
+
+coverage2 run -m nose --cover-package=amqp -w tests && \
+coverage2 report --include=amqp/* \
+    --omit "./tests/*" \
+    --omit "./amqp/utils/compat.py,./amqp/typesystem/utils.py" \
+    --fail-under $MIN_PERCENTAGE -m
+
