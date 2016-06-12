@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import datetime
-import unittest
+import struct
 import sys
+import unittest
+import uuid
 
 from amqp.typesystem import const
 from amqp.typesystem import decoder
@@ -9,7 +11,8 @@ from amqp.utils import compat
 
 
 if sys.version_info.major == 2:
-    bytes = bytearray
+    bytes = lambda value=None: ''.join([struct.pack('!B', x) for x in value])\
+        if value is not None else ''
 
 
 class NullDecoderTestCase(unittest.TestCase):
