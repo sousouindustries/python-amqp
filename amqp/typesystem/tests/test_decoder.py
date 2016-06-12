@@ -8,11 +8,7 @@ import uuid
 from amqp.typesystem import const
 from amqp.typesystem import decoder
 from amqp.utils import compat
-
-
-if sys.version_info.major == 2:
-    bytes = lambda value=None: ''.join([struct.pack('!B', x) for x in value])\
-        if value is not None else ''
+from amqp.utils.test import bytes
 
 
 class NullDecoderTestCase(unittest.TestCase):
