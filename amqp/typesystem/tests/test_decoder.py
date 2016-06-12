@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-import datetime
 import struct
 import sys
 import unittest
-import uuid
 
 from amqp.typesystem import const
 from amqp.typesystem import decoder
 from amqp.utils import compat
 from amqp.utils.test import bytes
+from amqp.utils.test import DataTypesMixin
 
 
 class NullDecoderTestCase(unittest.TestCase):
@@ -18,11 +17,7 @@ class NullDecoderTestCase(unittest.TestCase):
         self.assertEqual(value, None)
 
 
-class StringDecoderTestCase(unittest.TestCase):
-    b_sym8 = bytes([102, 111, 111]) # foo
-    b_sym32 = bytes(102 for x in range(256))
-    b_str8 = bytes([195, 171])
-    b_str32 = bytes([195, 171] * 256)
+class StringDecoderTestCase(unittest.TestCase, DataTypesMixin):
 
     def test_decode_sym8(self):
         value = decoder.decode_string('ascii', const.SYM8, self.b_sym8)
@@ -41,21 +36,7 @@ class StringDecoderTestCase(unittest.TestCase):
         self.assertEqual(value, u'ë' * 256)
 
 
-class IntegerDecoderTestCase(unittest.TestCase):
-    b_ubyte = bytes([1])                # 1
-    b_ushort = bytes([1,0])             # 256
-    b_uint = bytes([1,0,0,0])           # 16777216
-    b_uint0 = bytes()                   # Should be decoded to 0, as an unsigned integer
-    b_smalluint = bytes([1])            # 1, decoded to an unsigned integer
-    b_ulong = bytes([1,0,0,0,0,0,0,0])  # 72057594037927936
-    b_ulong0 = bytes()                  # Should be decoded to 0, as an unsigned long integer
-    b_smallulong = bytes([1])           # 1, decoded to an unsigned long integer
-    b_byte = bytes([255])               # -1
-    b_short = bytes([255,0])            # -256
-    b_int = bytes([255,0,0,0])          # -1677216
-    b_smallint = bytes([255])           # -1
-    b_long = bytes([255,0,0,0,0,0,0,0]) # -72057594037927936
-    b_smalllong = bytes([255])          # -1
+class IntegerDecoderTestCase(unittest.TestCase, DataTypesMixin):
 
     def test_decode_ubyte(self):
         value = decoder.decode_integer(False, const.UBYTE, self.b_ubyte)
@@ -114,11 +95,7 @@ class IntegerDecoderTestCase(unittest.TestCase):
         self.assertEqual(value, -1)
 
 
-class IEEE754BinaryDecoder(unittest.TestCase):
-    b_float = bytes([63, 128, 0, 0])
-    b_double = bytes([63, 240, 0, 0, 0, 0, 0, 0])
-    p_float = 1.0
-    p_double = 1.0
+class IEEE754BinaryDecoder(unittest.TestCase, DataTypesMixin):
 
     def test_decode_float(self):
         value = decoder.decode_ieee_754_binary(32, const.FLOAT, self.b_float)
@@ -129,7 +106,7 @@ class IEEE754BinaryDecoder(unittest.TestCase):
         self.assertEqual(self.p_double, value)
 
 
-class BooleanDecoderTestCase(unittest.TestCase):
+class BooleanDecoderTestCase(unittest.TestCase, DataTypesMixin):
 
     def test_decode_true(self):
         value = decoder.decode_boolean(const.TRUE, bytes())
@@ -148,9 +125,7 @@ class BooleanDecoderTestCase(unittest.TestCase):
         self.assertEqual(value, False)
 
 
-class BinaryDecoderTestCase(unittest.TestCase):
-    b_vbin8 = bytes([255,255])
-    b_vbin32 = bytes([255,255,255])
+class BinaryDecoderTestCase(unittest.TestCase, DataTypesMixin):
 
     def test_decode_vbin8(self):
         value = decoder.decode_binary(const.VBIN8, self.b_vbin8)
@@ -161,13 +136,7 @@ class BinaryDecoderTestCase(unittest.TestCase):
         self.assertEqual(value, self.b_vbin32)
 
 
-class TimestampTestCase(unittest.TestCase):
-    p_unix = datetime.datetime(1970, 1, 1)
-    p_gregorian = datetime.datetime(1, 1, 1)
-    p_j2000 = datetime.datetime(2000, 1, 1)
-    b_unix = bytes([0,0,0,0,0,0,0,0])
-    b_gregorian = bytes([255, 255, 199, 124, 237, 211, 40, 0])
-    b_j2000 = bytes([0, 0, 0, 220, 106, 207, 172, 0])
+class TimestampTestCase(unittest.TestCase, DataTypesMixin):
 
     def test_decode_unix(self):
         value = decoder.decode_timestamp(const.MS64, self.b_unix)
@@ -182,10 +151,7 @@ class TimestampTestCase(unittest.TestCase):
         self.assertEqual(value, self.p_j2000)
 
 
-class UUIDDecoderTestCase(unittest.TestCase):
-    b_uuid4 = bytes([206, 142, 2, 208, 203, 108, 70,
-        106, 184, 223, 216, 52, 241, 121, 49, 68])
-    p_uuid4 = uuid.UUID('ce8e02d0-cb6c-466a-b8df-d834f1793144')
+class UUIDDecoderTestCase(unittest.TestCase, DataTypesMixin):
 
     def test_decode_uuid4(self):
         value = decoder.decode_uuid(const.UUID, self.b_uuid4)
