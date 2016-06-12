@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import unittest
 import sys
 
@@ -159,3 +160,24 @@ class BinaryDecoderTestCase(unittest.TestCase):
     def test_decode_vbin32(self):
         value = decoder.decode_binary(const.VBIN32, self.b_vbin32)
         self.assertEqual(value, self.b_vbin32)
+
+
+class TimestampTestCase(unittest.TestCase):
+    p_unix = datetime.datetime(1970, 1, 1)
+    p_gregorian = datetime.datetime(1, 1, 1)
+    p_j2000 = datetime.datetime(2000, 1, 1)
+    b_unix = bytes([0,0,0,0,0,0,0,0])
+    b_gregorian = bytes([255, 255, 199, 124, 237, 211, 40, 0])
+    b_j2000 = bytes([0, 0, 0, 220, 106, 207, 172, 0])
+
+    def test_decode_unix(self):
+        value = decoder.decode_timestamp(const.MS64, self.b_unix)
+        self.assertEqual(value, self.p_unix)
+
+    def test_decode_gregorian(self):
+        value = decoder.decode_timestamp(const.MS64, self.b_gregorian)
+        self.assertEqual(value, self.p_gregorian)
+
+    def test_decode_j2000(self):
+        value = decoder.decode_timestamp(const.MS64, self.b_j2000)
+        self.assertEqual(value, self.p_j2000)

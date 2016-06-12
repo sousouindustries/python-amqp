@@ -1,3 +1,4 @@
+import datetime
 import struct
 
 from amqp.typesystem import const
@@ -29,3 +30,11 @@ def decode_boolean(format_code, value):
 
 def decode_binary(format_code, value):
     return value
+
+
+def decode_timestamp(format_code, value):
+    # The AMQP timestamp datatype is a signed long integer representing the
+    # number of milliseconds since the UNIX epoch.
+    timestamp = (float if compat.PY2 else lambda x: x)\
+        (decode_integer(True, const.LONG, value)) / 1000
+    return datetime.datetime.utcfromtimestamp(timestamp)
