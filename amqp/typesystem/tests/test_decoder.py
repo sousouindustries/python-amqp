@@ -112,3 +112,18 @@ class IntegerDecoderTestCase(unittest.TestCase):
     def test_decode_smalllong(self):
         value = decoder.decode_integer(True, const.SMALLLONG, self.b_smalllong)
         self.assertEqual(value, -1)
+
+
+class IEEE754BinaryDecoder(unittest.TestCase):
+    b_float = bytes([63, 128, 0, 0])
+    b_double = bytes([63, 240, 0, 0, 0, 0, 0, 0])
+    p_float = 1.0
+    p_double = 1.0
+
+    def test_decode_float(self):
+        value = decoder.decode_ieee_754_binary(32, const.FLOAT, self.b_float)
+        self.assertEqual(self.p_float, value)
+
+    def test_decode_double(self):
+        value = decoder.decode_ieee_754_binary(64, const.DOUBLE, self.b_double)
+        self.assertEqual(self.p_double, value)
