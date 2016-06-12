@@ -1,5 +1,6 @@
 import datetime
 import struct
+import uuid
 
 from amqp.typesystem import const
 from amqp.utils import compat
@@ -38,3 +39,7 @@ def decode_timestamp(format_code, value):
     timestamp = (float if compat.PY2 else lambda x: x)\
         (decode_integer(True, const.LONG, value)) / 1000
     return datetime.datetime.utcfromtimestamp(timestamp)
+
+
+def decode_uuid(format_code, value):
+    return uuid.UUID(bytes=value)

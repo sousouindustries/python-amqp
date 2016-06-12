@@ -184,3 +184,13 @@ class TimestampTestCase(unittest.TestCase):
     def test_decode_j2000(self):
         value = decoder.decode_timestamp(const.MS64, self.b_j2000)
         self.assertEqual(value, self.p_j2000)
+
+
+class UUIDDecoderTestCase(unittest.TestCase):
+    b_uuid4 = bytes([206, 142, 2, 208, 203, 108, 70,
+        106, 184, 223, 216, 52, 241, 121, 49, 68])
+    p_uuid4 = uuid.UUID('ce8e02d0-cb6c-466a-b8df-d834f1793144')
+
+    def test_decode_uuid4(self):
+        value = decoder.decode_uuid(const.UUID, self.b_uuid4)
+        self.assertEqual(value, self.p_uuid4)
