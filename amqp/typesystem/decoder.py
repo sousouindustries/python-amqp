@@ -25,3 +25,7 @@ def decode_ieee_754_binary(length, format_code, value):
 def decode_boolean(format_code, value):
     return (format_code == const.TRUE)\
         or (compat.from_bytes(value, 'big') == 1)
+
+
+def decode_binary(format_code, value):
+    return value

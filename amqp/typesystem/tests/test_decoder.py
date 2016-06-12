@@ -146,3 +146,16 @@ class BooleanDecoderTestCase(unittest.TestCase):
     def test_decode_boolean_false(self):
         value = decoder.decode_boolean(const.BOOLEAN, bytes([0]))
         self.assertEqual(value, False)
+
+
+class BinaryDecoderTestCase(unittest.TestCase):
+    b_vbin8 = bytes([255,255])
+    b_vbin32 = bytes([255,255,255])
+
+    def test_decode_vbin8(self):
+        value = decoder.decode_binary(const.VBIN8, self.b_vbin8)
+        self.assertEqual(value, self.b_vbin8)
+
+    def test_decode_vbin32(self):
+        value = decoder.decode_binary(const.VBIN32, self.b_vbin32)
+        self.assertEqual(value, self.b_vbin32)
