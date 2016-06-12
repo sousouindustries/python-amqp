@@ -127,3 +127,22 @@ class IEEE754BinaryDecoder(unittest.TestCase):
     def test_decode_double(self):
         value = decoder.decode_ieee_754_binary(64, const.DOUBLE, self.b_double)
         self.assertEqual(self.p_double, value)
+
+
+class BooleanDecoderTestCase(unittest.TestCase):
+
+    def test_decode_true(self):
+        value = decoder.decode_boolean(const.TRUE, bytes())
+        self.assertEqual(value, True)
+
+    def test_decode_false(self):
+        value = decoder.decode_boolean(const.FALSE, bytes())
+        self.assertEqual(value, False)
+
+    def test_decode_boolean_true(self):
+        value = decoder.decode_boolean(const.BOOLEAN, bytes([1]))
+        self.assertEqual(value, True)
+
+    def test_decode_boolean_false(self):
+        value = decoder.decode_boolean(const.BOOLEAN, bytes([0]))
+        self.assertEqual(value, False)
